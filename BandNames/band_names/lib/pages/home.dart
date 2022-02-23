@@ -4,6 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
+  const HomePage({Key? key}) : super(key: key);
+
   @override
   _HomePageState createState() => _HomePageState();
 }
@@ -13,22 +15,28 @@ class _HomePageState extends State<HomePage> {
     Band(id: '1', name: 'Metallica', votes: 2),
     Band(id: '2', name: 'Kaleo', votes: 4),
     Band(id: '3', name: 'Nirvana', votes: 1),
-    Band(id: '4', name: 'Coldplay', votes: 6)
+    Band(id: '4', name: 'Coldplay', votes: 6),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Band Names', style: TextStyle(color: Colors.black87)),
+        title: const Text('Band Names',
+            style: TextStyle(
+              color: Colors.black87,
+            )),
         backgroundColor: Colors.white,
         elevation: 5,
       ),
       body: ListView.builder(
-          itemCount: bands.length,
-          itemBuilder: (context, i) => bandTile(bands[i])),
+        itemCount: bands.length,
+        itemBuilder: (context, i) => bandTile(bands[i]),
+      ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        child: const Icon(
+          Icons.add,
+        ),
         elevation: 5,
         onPressed: () => addNewBand(context),
       ),
@@ -42,7 +50,7 @@ class _HomePageState extends State<HomePage> {
         backgroundColor: Colors.blue[100],
       ),
       title: Text(band.name),
-      trailing: Text('${band.votes}', style: TextStyle(fontSize: 20)),
+      trailing: Text('${band.votes}', style: const TextStyle(fontSize: 20)),
       onTap: () {
         print(band.name);
       },
@@ -50,21 +58,21 @@ class _HomePageState extends State<HomePage> {
   }
 
   addNewBand(BuildContext context) {
-    final textController = new TextEditingController();
+    final textController = TextEditingController();
     //Android
     if (Platform.isAndroid) {
       return showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text('New band name:'),
+            title: const Text('New band name:'),
             content: TextField(
               controller: textController,
             ),
             actions: <Widget>[
               MaterialButton(
                   onPressed: () => addBandToList(textController.text, context),
-                  child: Text('Add'),
+                  child: const Text('Add'),
                   elevation: 7,
                   textColor: Colors.blue)
             ],
@@ -76,16 +84,16 @@ class _HomePageState extends State<HomePage> {
           context: context,
           builder: (_) {
             return CupertinoAlertDialog(
-              title: Text('New band name:'),
+              title: const Text('New band name:'),
               content: TextField(controller: textController),
               actions: <Widget>[
                 CupertinoDialogAction(
-                  child: Text('Add'),
+                  child: const Text('Add'),
                   onPressed: () => addBandToList(textController.text, context),
                   isDefaultAction: true,
                 ),
                 CupertinoDialogAction(
-                  child: Text('Dismiss'),
+                  child: const Text('Dismiss'),
                   onPressed: () => Navigator.pop(context),
                   isDestructiveAction: true,
                 ),
@@ -99,7 +107,11 @@ class _HomePageState extends State<HomePage> {
     print(name.length);
 
     if (name.length > 1) {
-      this.bands.add(new Band(id: DateTime.now().toString(), name: name));
+      bands.add(Band(
+        id: DateTime.now().toString(),
+        name: name,
+        votes: 0,
+      ));
       setState(() {});
     }
 

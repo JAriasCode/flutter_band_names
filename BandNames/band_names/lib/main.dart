@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Material App',
       initialRoute: 'home',
-      routes: {'home': (_) => HomePage()},
+      routes: {'home': (_) => const HomePage()},
     );
   }
 }
