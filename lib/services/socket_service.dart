@@ -1,47 +1,46 @@
+// ignore_for_file: constant_identifier_names
+
 import 'package:flutter/material.dart';
 
+// ignore: library_prefixes
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
-enum ServerStatus {
-  Online,
-  Offline,
-  Connecting
-}
-
+enum ServerStatus { Online, Offline, Connecting }
 
 class SocketService with ChangeNotifier {
-
   ServerStatus _serverStatus = ServerStatus.Connecting;
-  IO.Socket _socket;
+  IO.Socket _socket = IO.io(
+    'https://jariascode-bandnamesserver.herokuapp.com/',
+  );
 
-  ServerStatus get serverStatus => this._serverStatus;
-  
-  IO.Socket get socket => this._socket;
-  Function get emit => this._socket.emit;
+  ServerStatus get serverStatus => _serverStatus;
 
+  IO.Socket get socket => _socket;
+  Function get emit => _socket.emit;
 
-  SocketService(){
-    this._initConfig();
+  SocketService() {
+    _initConfig();
   }
 
   void _initConfig() {
-    
     // Dart client
-    this._socket = IO.io('http://localhost:3000/', {
+    _socket = IO.io('https://jariascode-bandnamesserver.herokuapp.com/', {
       'transports': ['websocket'],
       'autoConnect': true
     });
 
-    this._socket.on('connect', (_) {
-      this._serverStatus = ServerStatus.Online;
+    _socket.on('connect', (_) {
+      _serverStatus = ServerStatus.Online;
       notifyListeners();
     });
 
-    this._socket.on('disconnect', (_) {
-      this._serverStatus = ServerStatus.Offline;
+    _socket.on('disconnect', (_) {
+      _serverStatus = ServerStatus.Offline;
       notifyListeners();
     });
 
+    // _socket.on('mensaje', (payload) {
+    //   print('mensaje: $payload');
+    // });
   }
-
 }
