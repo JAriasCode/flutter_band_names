@@ -62,13 +62,17 @@ class _HomePageState extends State<HomePage> {
           _showGraph(),
           Expanded(
             child: ListView.builder(
-                itemCount: bands.length,
-                itemBuilder: (context, i) => _bandTile(bands[i])),
+              itemCount: bands.length,
+              itemBuilder: (context, i) => _bandTile(bands[i]),
+            ),
           )
         ],
       ),
       floatingActionButton: FloatingActionButton(
-          child: const Icon(Icons.add), elevation: 1, onPressed: addNewBand),
+        child: const Icon(Icons.add),
+        elevation: 1,
+        onPressed: addNewBand,
+      ),
     );
   }
 
@@ -112,10 +116,11 @@ class _HomePageState extends State<HomePage> {
                 ),
                 actions: <Widget>[
                   MaterialButton(
-                      child: const Text('Add'),
-                      elevation: 5,
-                      textColor: Colors.blue,
-                      onPressed: () => addBandToList(textController.text))
+                    child: const Text('Add'),
+                    elevation: 5,
+                    textColor: Colors.blue,
+                    onPressed: () => addBandToList(textController.text),
+                  )
                 ],
               ));
     }
@@ -129,13 +134,15 @@ class _HomePageState extends State<HomePage> {
               ),
               actions: <Widget>[
                 CupertinoDialogAction(
-                    isDefaultAction: true,
-                    child: const Text('Add'),
-                    onPressed: () => addBandToList(textController.text)),
+                  isDefaultAction: true,
+                  child: const Text('Add'),
+                  onPressed: () => addBandToList(textController.text),
+                ),
                 CupertinoDialogAction(
-                    isDestructiveAction: true,
-                    child: const Text('Dismiss'),
-                    onPressed: () => Navigator.pop(context))
+                  isDestructiveAction: true,
+                  child: const Text('Dismiss'),
+                  onPressed: () => Navigator.pop(context),
+                )
               ],
             ));
   }
@@ -152,7 +159,7 @@ class _HomePageState extends State<HomePage> {
   // Mostrar gráfica
   Widget _showGraph() {
     Map<String, double> dataMap = {};
-    dataMap.putIfAbsent('Flutter', () => 0);
+    //dataMap.putIfAbsent('Flutter', () => 0);
     bands.forEach((band) {
       dataMap.putIfAbsent(band.name, () => band.votes.toDouble());
     });
@@ -166,25 +173,28 @@ class _HomePageState extends State<HomePage> {
       const Color.fromRGBO(255, 245, 157, 1),
     ];
 
-    return Container(
-        padding: const EdgeInsets.only(top: 10),
-        width: double.infinity,
-        height: 200,
-        child: PieChart(
-          dataMap: dataMap,
-          animationDuration: const Duration(milliseconds: 800),
-          colorList: colorList,
-          chartType: ChartType.ring,
-          legendOptions: const LegendOptions(
-            showLegends: true,
-          ),
-          chartValuesOptions: ChartValuesOptions(
-            showChartValuesInPercentage: true,
-            showChartValues: true,
-            showChartValuesOutside: false,
-            chartValueBackgroundColor: Colors.grey[200],
-            decimalPlaces: 0,
-          ),
-        ));
+    return dataMap.isNotEmpty
+        ? Container(
+            padding: const EdgeInsets.only(top: 10),
+            width: double.infinity,
+            height: 200,
+            child: PieChart(
+              dataMap: dataMap,
+              animationDuration: const Duration(milliseconds: 800),
+              colorList: colorList,
+              chartType: ChartType.ring,
+              legendOptions: const LegendOptions(
+                showLegends: true,
+              ),
+              chartValuesOptions: ChartValuesOptions(
+                showChartValuesInPercentage: true,
+                showChartValues: true,
+                showChartValuesOutside: false,
+                chartValueBackgroundColor: Colors.grey[200],
+                decimalPlaces: 0,
+              ),
+            ),
+          )
+        : LinearProgressIndicator();
   }
 }
